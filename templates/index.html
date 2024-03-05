@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<section>
+    <div class="string_input_form">
+        <form id="input_form" method="POST"> <!-- Added method="POST" to submit the form -->
+            <div class="form_title"><u>Enter your string here!</u></div><br>
+            <div class="string_input"><input type="text" id="input_string" name="input_string"></div> <!-- Added name="input_string" to identify the input -->
+            <div class="submit_button"><input type="submit" value="Submit"></div> <!-- Changed type="button" to type="submit" to submit the form -->
+        </form>
+    </div>
+    
+    <div class="output_box">
+        <div class="form_title"><u>Output:</u></div>
+        <div id="output_text">{{ output }}</div> <!-- Output generated from Flask backend -->
+    </div>
+</section>
+
+</body>
+</html>
