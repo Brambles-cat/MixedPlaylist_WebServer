@@ -14,7 +14,7 @@
 
         .form-wrapper {
             display: flex;
-            flex-direction: column; /* Stack elements vertically */
+            flex-direction: column;
             align-items: center;
         }
 
@@ -23,21 +23,32 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background-color: #3451e2; /* Grey color */
+            background-color: #3451e2;
             color: #ffffff;
             text-align: center;
             font-size: 140%;
             cursor: pointer;
             border: none;
-            margin-top: 10px; /* Add spacing between input and button */
+            margin-top: 10px;
         }
 
         .rectangle {
-            width: 100%; /* Same width as the form */
-            height: 20px; /* Adjust height as needed */
-            background-color: #f0f0f0; /* Light gray color */
-            border-radius: 5px; /* Rounded corners */
-            margin-top: 10px; /* Add spacing between input and rectangle */
+            display: flex;
+            align-items: center;
+            width: 180%;
+            height: 100px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .thumbnail {
+            width: 150px;
+            height: 85%;
+            background-image: url('https://i.ytimg.com/vi/UEJPpJPkFbQ/maxresdefault.jpg'); /* Replace with your image URL */
+            background-size: cover;
+            margin-left: 7px; /* Adjust this value for desired offset from the left side */
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -48,7 +59,9 @@
                 <input type="text" placeholder="Video URL here" name="url">
                 <button type="submit" class="circle-button">+</button>
             </form>
-            <div class="rectangle"></div> <!-- Light gray rectangle -->
+            <div class="rectangle">
+                <div class="thumbnail"></div>
+            </div>
         </div>
     </div>
 </body>

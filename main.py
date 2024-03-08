@@ -1,4 +1,6 @@
 from flask import Flask, redirect, url_for, request, send_from_directory
+from yt_dlp import YoutubeDL
+
 app = Flask(__name__)
 
 @app.route('/playlist/<id>')
@@ -36,4 +38,17 @@ def login():
 
 
 if __name__ == '__main__':
-	app.run(host='localhost', port=5000, debug=True)
+	ydl_opts = {
+        "quiet": False,
+    }
+
+	with YoutubeDL(ydl_opts) as ydl:
+		info = ydl.extract_info("https://www.youtube.com/watch?v=UEJPpJPkFbQ", download=False)
+		if "entries" in info:
+			info = info["entries"][0]
+			print(info)
+		else:
+			print(info.keys())
+			print(info["thumbnail"])
+
+	#app.run(host='localhost', port=5000, debug=True)
