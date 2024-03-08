@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Uploader</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .form-wrapper {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center;
+        }
+
+        .circle-button {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #3451e2; /* Grey color */
+            color: #ffffff;
+            text-align: center;
+            font-size: 140%;
+            cursor: pointer;
+            border: none;
+            margin-top: 10px; /* Add spacing between input and button */
+        }
+
+        .rectangle {
+            width: 100%; /* Same width as the form */
+            height: 20px; /* Adjust height as needed */
+            background-color: #f0f0f0; /* Light gray color */
+            border-radius: 5px; /* Rounded corners */
+            margin-top: 10px; /* Add spacing between input and rectangle */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <form action="http://localhost:1000/add_video" method="post">
+                <input type="text" placeholder="Video URL here" name="url">
+                <button type="submit" class="circle-button">+</button>
+            </form>
+            <div class="rectangle"></div> <!-- Light gray rectangle -->
+        </div>
+    </div>
+</body>
+</html>

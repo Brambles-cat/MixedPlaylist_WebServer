@@ -1,21 +1,38 @@
-from flask import Flask, render_template, request
-
+from flask import Flask, redirect, url_for, request, send_from_directory
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.route('/playlist/<id>')
+def playlist(id: str):
+	pass
 
-@app.route('/', methods=['POST'])
-def process_form():
-    if request.method == 'POST':
-        input_string = request.form['input_string']
-        # Process the input string (e.g., send it to a Python script)
-        # and generate the output
-        output = "Output generated from processing: " + input_string
-        return render_template('index.html', output=output)
-    else:
-        return render_template('index.html')
+@app.route("/create")
+def create():
+	return send_from_directory('templates', 'create.html')
+
+@app.route('/')
+def enter():
+	return send_from_directory('templates', 'index.html')
+
+@app.route('/success/<name>')
+def success(name):
+	return 'welcome %s' % name
+
+@app.route('/add_video', methods=['POST', 'GET'])
+def add_video():
+	if request.method == 'POST':
+		return request.form['url']
+	else:
+		print("idkman")
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+	if request.method == 'POST':
+		user = request.form['nm']
+		return redirect(url_for('success', name=user))
+	else:
+		user = request.args.get('nm')
+		return redirect(url_for('success', name=user))
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+	app.run(host='localhost', port=1000, debug=True)
