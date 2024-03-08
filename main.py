@@ -1,30 +1,51 @@
-from flask import Flask, redirect, url_for, request, send_from_directory
+from flask import Flask, redirect, url_for, request, send_from_directory, render_template
 from yt_dlp import YoutubeDL
 
 app = Flask(__name__)
+
+ydl_opts = {
+    "quiet": False,
+}
+
+ydl = YoutubeDL(ydl_opts) #ydl.close()
 
 @app.route('/playlist/<id>')
 def playlist(id: str):
 	pass
 
-@app.route("/create")
+@app.route("/create", methods=['POST', 'GET'])
 def create():
-	return send_from_directory('templates', 'create.html')
+	if request.method != 'POST':
+		return send_from_directory('templates', 'create.html')
+	
+	with YoutubeDL(ydl_opts) as ydl:
+		info = ydl.extract_info(request.form['url'], download=False)
+	return render_template('create.html', thumbnail_url=info["thumbnail"]) #https://www.youtube.com/watch?v=UEJPpJPkFbQ
 
-@app.route('/')
-def enter():
-	return send_from_directory('templates', 'index.html')
 
+
+if __name__ == '__main__':
+	
+	#if "entries" in info:
+	#			info = info["entries"][0]
+	#			print(info)
+	#		else:
+	#			print(info.keys())
+	#			print(info["thumbnail"])
+
+	app.run(host='localhost', port=5000, debug=True)
+
+
+
+# not impotant
+	
 @app.route('/success/<name>')
 def success(name):
 	return 'welcome %s' % name
 
-@app.route('/add_video', methods=['POST', 'GET'])
-def add_video():
-	if request.method == 'POST':
-		return request.form['url']
-	else:
-		print("idkman")
+@app.route('/')
+def enter():
+	return send_from_directory('templates', 'index.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -35,20 +56,3 @@ def login():
 	else:
 		user = request.args.get('nm')
 		return redirect(url_for('success', name=user))
-
-
-if __name__ == '__main__':
-	ydl_opts = {
-        "quiet": False,
-    }
-
-	with YoutubeDL(ydl_opts) as ydl:
-		info = ydl.extract_info("https://www.youtube.com/watch?v=UEJPpJPkFbQ", download=False)
-		if "entries" in info:
-			info = info["entries"][0]
-			print(info)
-		else:
-			print(info.keys())
-			print(info["thumbnail"])
-
-	app.run(host='localhost', port=5000, debug=True)
