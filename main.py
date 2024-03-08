@@ -26,6 +26,7 @@ def add_video():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+	print("meodrt\n\n\nfy")
 	if request.method == 'POST':
 		user = request.form['nm']
 		return redirect(url_for('success', name=user))
@@ -35,4 +36,4 @@ def login():
 
 
 if __name__ == '__main__':
-	app.run(host='localhost', port=1000, debug=True)
+	app.run(host='localhost', port=5000, debug=True)
