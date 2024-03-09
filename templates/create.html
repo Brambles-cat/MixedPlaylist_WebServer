@@ -40,7 +40,7 @@
             height: 25vw;
             background-color: #f0f0f0;
             border-radius: 5px;
-            margin-top: 20px;
+            margin-top: 10px;
             max-height: 110px;
         }
 
@@ -80,9 +80,11 @@
         }
 
         .video_title {
-            font-size: medium;
+            font-size: large;
             margin-left: 4%;
             margin-bottom: 40px;
+            color:#3396c4;
+            text-decoration: none;
         }
 
         .source {
@@ -97,7 +99,7 @@
     <div class="container">
         <div class="form-wrapper">
             <form action="http://localhost:5000/create" method="post">
-                <input type="text" placeholder="Video URL here" name="url" style="width: 50vw">
+                <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
                 <button type="submit" class="circle-button">+</button>
             </form>
             {% if not vids %}
@@ -109,7 +111,7 @@
                 <div class="rectangle">
                     <span class="placeholder-number">{{ vid.index }}.</span>
                     <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
-                    <a href={{ vid.url }} class="video_title">{{ vid.title }}</span>
+                    <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
                     <span class="source">Source: {{ vid.source }}</span>
                 </div>
             {% endfor %}

@@ -4,3 +4,4 @@ class Video:
         self.index = index
         self.title = title
         self.source = url.split("/")[2]
+        self.url = url
