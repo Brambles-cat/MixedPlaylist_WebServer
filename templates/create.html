@@ -46,9 +46,8 @@
         .thumbnail {
             width: 50%;
             height: 90%;
-            background-image: url('{{ thumbnail_url }}');
             background-size: cover;
-            margin-left: 7px; /* Adjust this value for desired offset from the left side */
+            margin-left: 6px; /* Adjust this value for desired offset from the left side */
             border-radius: 5px;
             max-height: 100px;
             max-width: 160px;
@@ -76,7 +75,7 @@
 
         .placeholder-number {
             font-size: 18px;
-            margin-right: 10px; /* Adjust this value for desired spacing */
+            margin-left: 1px; /* Adjust this value for desired spacing */
         }
 
     </style>
@@ -88,10 +87,17 @@
                 <input type="text" placeholder="Video URL here" name="url" style="width: 50vw">
                 <button type="submit" class="circle-button">+</button>
             </form>
-            <div class="rectangle">
-                <div class="thumbnail"></div>
-                <span class="placeholder-number">1</span>
-            </div>
+            {% if not vids %}
+                <div class="rectangle">
+                    <div class="thumbnail"></div>
+                </div>
+            {% endif %}
+            {% for vid in vids %}
+                <div class="rectangle">
+                    <span class="placeholder-number">{{ vid.index }}.</span>
+                    <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
+                </div>
+            {% endfor %}
             <div class="circle"></div>
         </div>
     </div>

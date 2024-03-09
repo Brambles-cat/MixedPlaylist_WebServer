@@ -1,7 +1,11 @@
 from flask import Flask, redirect, url_for, request, send_from_directory, render_template
 from yt_dlp import YoutubeDL
 
+from modulethingy import *
+
 app = Flask(__name__)
+
+videos = []
 
 ydl_opts = {
     "quiet": False,
@@ -16,11 +20,16 @@ def playlist(id: str):
 @app.route("/create", methods=['POST', 'GET'])
 def create():
 	if request.method != 'POST':
-		return send_from_directory('templates', 'create.html')
+		return render_template('create.html')
 	
 	with YoutubeDL(ydl_opts) as ydl:
 		info = ydl.extract_info(request.form['url'], download=False)
-	return render_template('create.html', thumbnail_url=info["thumbnail"]) #https://www.youtube.com/watch?v=UEJPpJPkFbQ
+		video = Video()
+		video.thumbnail = info["thumbnail"];
+		video.index = len(videos) + 1
+		videos.append(video)
+
+	return render_template('create.html', vids=videos) #https://www.youtube.com/watch?v=UEJPpJPkFbQ
 
 
 
