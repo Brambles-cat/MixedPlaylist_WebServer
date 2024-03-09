@@ -1,6 +1,5 @@
 from flask import Flask, redirect, url_for, request, send_from_directory, render_template
 from yt_dlp import YoutubeDL
-from flask_session import Session
 
 from modulethingy import *
 
@@ -9,7 +8,7 @@ app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = True
 
-Session(app)
+#Session(app)
 
 videos = []
 
