@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Uploader</title>
+    <title>T10P-Playlist</title>
     <style>
         .container {
             display: flex;
@@ -33,6 +33,7 @@
         }
 
         .rectangle {
+            position: relative;
             display: flex;
             align-items: center;
             width: 80vw;
@@ -80,8 +81,14 @@
 
         .video_title {
             font-size: medium;
-            margin-left: 5%;
+            margin-left: 4%;
             margin-bottom: 40px;
+        }
+
+        .source {
+            position: absolute;
+            bottom: 3px;
+            right: 5px;
         }
 
     </style>
@@ -102,8 +109,8 @@
                 <div class="rectangle">
                     <span class="placeholder-number">{{ vid.index }}.</span>
                     <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
-                    <span class="video_title">{{ vid.title }}</span>
-                    <span class="source">{{ vid.source }}</span>
+                    <a href={{ vid.url }} class="video_title">{{ vid.title }}</span>
+                    <span class="source">Source: {{ vid.source }}</span>
                 </div>
             {% endfor %}
             <div class="circle"></div>
