@@ -78,6 +78,12 @@
             margin-left: 1px; /* Adjust this value for desired spacing */
         }
 
+        .video_title {
+            font-size: medium;
+            margin-left: 5%;
+            margin-bottom: 40px;
+        }
+
     </style>
 </head>
 <body>
@@ -96,6 +102,8 @@
                 <div class="rectangle">
                     <span class="placeholder-number">{{ vid.index }}.</span>
                     <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
+                    <span class="video_title">{{ vid.title }}</span>
+                    <span class="source">{{ vid.source }}</span>
                 </div>
             {% endfor %}
             <div class="circle"></div>
