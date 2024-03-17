@@ -6,3 +6,4 @@ flask_session
 Scripts
 Lib
 pyvenv.cfg
+saved_playlists.db
