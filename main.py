@@ -27,14 +27,23 @@ def create():
 	
 	with YoutubeDL(ydl_opts) as ydl:
 		url = request.form['url']
-		info = ydl.extract_info(url, download=False)
+
+		try:
+			info = ydl.extract_info(url, download=False)
+		except Exception as e:
+			return render_template('create.html', vids=videos, error=True)
+
 		video = Video(info["thumbnail"], len(videos) + 1, info["title"], url)
 		videos.append(video)
 		print(video.title)
 
 	return render_template('create.html', vids=videos) #https://www.youtube.com/watch?v=UEJPpJPkFbQ
 
+@app.route("/")
+def enter():
+	return render_template('create.html')
+
 
 
 if __name__ == '__main__':
-	app.run(host='localhost', port=5000, debug=True)
+	app.run(host='0.0.0.0', port=5000, debug=True)
