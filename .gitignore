@@ -5,5 +5,5 @@ __pycache__
 flask_session
 Scripts
 Lib
-pyvenv.cfg
+my_venv
 saved_playlists.db
