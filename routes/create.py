@@ -14,36 +14,40 @@ ydl_opts = {
 def create():
 	if request.method != 'POST':
 		if request.cookies.get("uid") is None:
-			print("makin de cookie")
 			resp = make_response(render_template('create.html'))
 			resp.set_cookie("uid", str(uuid.uuid4()), max_age=None, path='/', secure=True, httponly=True)
 			return resp
-		else:
-			print(request.cookies)
 
 		return render_template('create.html')
-	
 	with YoutubeDL(ydl_opts) as ydl:
 		if session.get('videos', None) is None:
 			session['videos'] = []
 
-		session_videos: list[dict] = session['videos']
 		url = request.form['url']
 
 		try:
 			info = ydl.extract_info(url, download=False)
 		except Exception as e:
-			return render_template('create.html', vids=session_videos, error=True)
+			return render_template('create.html', vids=session['videos'], error=True)
 
-		video: dict = video_data(info["thumbnail"], len(session_videos) + 1, info["title"], url)
-		session_videos.append(video)
+	session_vids = session['videos']
+	fetched_video: dict = video_data(info["thumbnail"], len(session_vids) + 1, info["title"], url)
+	session_vids.append(fetched_video)
+	session['videos'] = session_vids
+	
+	if session.get("playlist_id") is None:
+		session["playlist_id"] = str(uuid.uuid4())
 
-		data_to_store = [str(uuid.uuid4()), request.cookies.get("uid")]
-		for vid in session_videos:
-			data_to_store.append(json.dumps(vid))
-		for i in range(10 - len(session_videos)):
-			data_to_store.append(None)
-		
-		db.insert_data(tuple(data_to_store))
+		data_to_store = (
+			session["playlist_id"], request.cookies.get("uid"), json.dumps(fetched_video)
+		)
+			
+		db.initialize_playlist(data_to_store)
+	else:
+		db.update_data(
+			session["playlist_id"],
+			json.dumps(fetched_video),
+			len(session_vids)
+		)
 
-	return render_template('create.html', vids=session_videos)
+	return render_template('create.html', vids=session_vids, sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
