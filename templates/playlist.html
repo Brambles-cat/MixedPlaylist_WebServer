@@ -12,24 +12,10 @@
             height: 100vh;
         }
 
-        .form-wrapper {
+        .video-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .circle-button {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #3451e2;
-            color: #ffffff;
-            text-align: center;
-            font-size: 140%;
-            cursor: pointer;
-            border: none;
-            margin-top: 10px;
         }
 
         .rectangle {
@@ -93,42 +79,11 @@
             right: 5px;
         }
 
-        .fade-box {
-            width: 160px;
-            height: 75px;
-            background-color: #888;
-            color: white;
-            border-radius: 5px;
-            text-align: center;
-            line-height: 75px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 1; /* Initial opacity */
-            animation: fadeOut 3s ease-in-out forwards;
-        }
-
-        @keyframes fadeOut {
-            0% { opacity: 1; } /* Initial opacity */
-            100% { opacity: 0; } /* Final opacity (fade-out) */
-        }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-wrapper">
-            <form action="https://www.mixedplaylist.com/create" method="post">
-                <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
-                <button type="submit" class="circle-button">+</button>
-            </form>
-
-            {% if not vids %}
-                <div class="rectangle">
-                    <div class="thumbnail"></div>
-                </div>
-            {% endif %}
+        <div class="video-wrapper">
 
             {% for vid in vids %}
                 <div class="rectangle">
@@ -138,10 +93,6 @@
                     <span class="source">Source: {{ vid.source }}</span>
                 </div>
             {% endfor %}
-
-            {% if error %}
-                <div class="fade-box">Invalid URL</div>
-            {% endif %}
 
             <div class="circle"></div>
         </div>
