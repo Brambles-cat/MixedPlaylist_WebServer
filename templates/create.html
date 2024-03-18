@@ -18,7 +18,7 @@
             align-items: center;
         }
 
-        .circle-button {
+        .add-url-btn {
             display: inline-block;
             width: 30px;
             height: 30px;
@@ -54,7 +54,7 @@
             max-width: 170px;
         }
 
-        .circle {
+        .loading-symbol {
             display: none;
             width: 20px;
             height: 10px;
@@ -70,7 +70,7 @@
             100% { transform: rotate(360deg); }
         }
         
-        .circle.visible {
+        .loading-symbol.visible {
             display: block;
         }
 
@@ -93,7 +93,7 @@
             right: 5px;
         }
 
-        .fade-box {
+        .invalid-url-box {
             width: 160px;
             height: 75px;
             background-color: #888;
@@ -121,7 +121,7 @@
         <div class="form-wrapper">
             <form action="https://www.mixedplaylist.com/create" method="post">
                 <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
-                <button type="submit" class="circle-button">+</button>
+                <button type="submit" class="add-url-btn">+</button>
             </form>
 
             {% if not vids %}
@@ -140,15 +140,20 @@
             {% endfor %}
 
             {% if error %}
-                <div class="fade-box">Invalid URL</div>
+                <div class="invalid-url-box">Invalid URL</div>
             {% endif %}
 
-            <div class="circle"></div>
+            <div class="loading-symbol"></div>
+            
+            {% if sharevalue %}
+                <button onclick="myFunction()">Copy link</button>
+            {% endif %}
+
         </div>
     </div>
     <script>
-        const myButton = document.querySelector('.circle-button');
-        const myTarget = document.querySelector('.circle');
+        const myButton = document.querySelector('.add-url-btn');
+        const myTarget = document.querySelector('.loading-symbol');
         
         function toggleVisibility() {
             myTarget.classList.toggle('visible');
@@ -156,5 +161,19 @@
         
         myButton.addEventListener('click', toggleVisibility);
     </script>
+
+    {% if sharevalue %}
+    <script>
+        function myFunction() {
+          /* Get the value from Flask */
+          var copyText = "{{ sharevalue }}";
+        
+          /* Copy the text to the clipboard */
+          navigator.clipboard.writeText(copyText).catch(function(err) {
+            alert('Could not copy text: ' + err);
+          });
+        }
+    </script>
+    {% endif %}
 </body>
 </html>
