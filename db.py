@@ -2,23 +2,38 @@ import sqlite3
 from sqlite3 import Error
 from sqlite3 import Connection
 
-def create_connection(db_file):
-    conn = None
+def create_table(conn: Connection, create_table_sql: str):
     try:
-        conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
+        c = conn.cursor()
+        c.execute(create_table_sql)
     except Error as e:
         print(e)
-    
-    return conn
 
+def insert_data(data: tuple, keepConnectionOpen= False, connection=None) -> Connection | None:
+    conn: Connection = sqlite3.connect("saved_playlists.db", check_same_thread=False) if connection is None else connection
+    
+    sql = ''' INSERT INTO test(id,owner_id,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, data)
+    conn.commit()
+    
+    if keepConnectionOpen:
+        return conn
+    
+    conn.close()
+
+def get_playlist(id: str) -> tuple:
+    conn: Connection = sqlite3.connect("saved_playlists.db", check_same_thread=False)
+
+    sql = ''' SELECT * FROM test WHERE id = ? LIMIT 1'''
+    cur = conn.cursor()
+    return cur.execute(sql, (id,)).fetchone()
 
 if __name__ == '__main__':
-    conn = create_connection("saved_playlists.db")
-    curser = conn.cursor()
-    
-    sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS test (
-                                        id integer PRIMARY KEY,
+
+    create_table_test = """ CREATE TABLE IF NOT EXISTS test (
+                                        id PRIMARY KEY,
                                         owner_id NOT NULL,
                                         v1 text NOT NULL,
                                         v2 text,
@@ -32,6 +47,8 @@ if __name__ == '__main__':
                                         v10 text
                                     ); """
     
-    curser.execute(sql_create_projects_table)
+    conn: Connection = sqlite3.connect("saved_playlists.db", check_same_thread=False)
+    create_table(conn, create_table_test)
+    conn.commit()
+    insert_data((1029, "meow", "some title idk", None, None, None, None, None, None, None, None, None))
     
-
