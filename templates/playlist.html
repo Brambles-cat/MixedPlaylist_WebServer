@@ -12,24 +12,10 @@
             height: 100vh;
         }
 
-        .form-wrapper {
+        .video-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .add-url-btn {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #3451e2;
-            color: #ffffff;
-            text-align: center;
-            font-size: 140%;
-            cursor: pointer;
-            border: none;
-            margin-top: 10px;
         }
 
         .rectangle {
@@ -54,7 +40,7 @@
             max-width: 170px;
         }
 
-        .loading-symbol {
+        .circle {
             display: none;
             width: 20px;
             height: 10px;
@@ -70,7 +56,7 @@
             100% { transform: rotate(360deg); }
         }
         
-        .loading-symbol.visible {
+        .circle.visible {
             display: block;
         }
 
@@ -93,42 +79,11 @@
             right: 5px;
         }
 
-        .invalid-url-box {
-            width: 160px;
-            height: 75px;
-            background-color: #888;
-            color: white;
-            border-radius: 5px;
-            text-align: center;
-            line-height: 75px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 1; /* Initial opacity */
-            animation: fadeOut 3s ease-in-out forwards;
-        }
-
-        @keyframes fadeOut {
-            0% { opacity: 1; } /* Initial opacity */
-            100% { opacity: 0; } /* Final opacity (fade-out) */
-        }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-wrapper">
-            <form action="https://www.mixedplaylist.com/create" method="post">
-                <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
-                <button type="submit" class="add-url-btn">+</button>
-            </form>
-
-            {% if not vids %}
-                <div class="rectangle">
-                    <div class="thumbnail"></div>
-                </div>
-            {% endif %}
+        <div class="video-wrapper">
 
             {% for vid in vids %}
                 <div class="rectangle">
@@ -139,21 +94,12 @@
                 </div>
             {% endfor %}
 
-            {% if error %}
-                <div class="invalid-url-box">Invalid URL</div>
-            {% endif %}
-
-            <div class="loading-symbol"></div>
-            
-            {% if sharevalue %}
-                <button onclick="myFunction()">Copy link</button>
-            {% endif %}
-
+            <div class="circle"></div>
         </div>
     </div>
     <script>
-        const myButton = document.querySelector('.add-url-btn');
-        const myTarget = document.querySelector('.loading-symbol');
+        const myButton = document.querySelector('.circle-button');
+        const myTarget = document.querySelector('.circle');
         
         function toggleVisibility() {
             myTarget.classList.toggle('visible');
@@ -161,19 +107,5 @@
         
         myButton.addEventListener('click', toggleVisibility);
     </script>
-
-    {% if sharevalue %}
-    <script>
-        function myFunction() {
-          /* Get the value from Flask */
-          var copyText = "{{ sharevalue }}";
-        
-          /* Copy the text to the clipboard */
-          navigator.clipboard.writeText(copyText).catch(function(err) {
-            alert('Could not copy text: ' + err);
-          });
-        }
-    </script>
-    {% endif %}
 </body>
 </html>

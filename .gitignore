@@ -1,8 +1,9 @@
 .env
-discord_bot
 __pycache__
 .vscode
 flask_session
 Scripts
 Lib
-pyvenv.cfg
+my_venv
+saved_playlists.db
+notes.txt
