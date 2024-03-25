@@ -11,7 +11,7 @@
     align-items: center;
 }
 
-.circle-button {
+.add-url-btn {
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -44,10 +44,10 @@
     margin-left: 6px; /* Adjust this value for desired offset from the left side */
     border-radius: 5px;
     max-height: 100px;
-    max-width: 160px;
+    max-width: 170px;
 }
 
-.circle {
+.loading-symbol {
     display: none;
     width: 20px;
     height: 10px;
@@ -63,7 +63,7 @@
     100% { transform: rotate(360deg); }
 }
 
-.circle.visible {
+.loading-symbol.visible {
     display: block;
 }
 
@@ -86,11 +86,28 @@
     right: 5px;
 }
 
+.invalid-url-box {
+    width: 160px;
+    height: 75px;
+    background-color: #888;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 75px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1; /* Initial opacity */
+    animation: fadeOut 3s ease-in-out forwards;
+}
+
 .share-button {
-    height: 40px;
-    width: 40px;
+    height: 25px;
+    width: 25px;
     background-color: blue;
-    background-image: url("link.png");
+    background-image: url("/static/images/link.png");
+    background-position: center;
     background-repeat: no-repeat;
     background-size: 80%;
     border: none;
