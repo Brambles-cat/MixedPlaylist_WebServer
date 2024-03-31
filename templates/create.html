@@ -26,6 +26,9 @@
                     <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
                     <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
                     <span class="source">Source: {{ vid.source }}</span>
+                    <button class="delete-button">
+                        <img src="trash-can-icon.png">
+                    </button>
                 </div>
             {% endfor %}
 
@@ -36,7 +39,9 @@
             <div class="loading-symbol"></div>
             
             {% if sharevalue %}
-                <button type="button" class="share-button" onclick="copyToClipboard()"></button>
+                <button type="button" class="share-button" onclick="copyToClipboard()">
+                    <div class="share_hover_box">Copy Link</div>
+                </button>
             {% endif %}
 
         </div>
