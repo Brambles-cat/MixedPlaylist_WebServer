@@ -39,10 +39,17 @@
 
 .delete-button {
     background-color: red;
+    width: 20px;
+    height: 20px;
     border: none;
     padding: 5px;
     position: absolute;
     visibility: hidden;
+    background-image: url("/static/images/trash-icon.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+
     top: 10px; /* Adjust the spacing from the top */
     right: 10px; /* Adjust the spacing from the right */
     border-radius: 50%; /* Make it circular */
