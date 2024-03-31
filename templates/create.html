@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <div class="form-wrapper">
-            <form action="https://www.mixedplaylist.com/create" method="post">
+            <form action="{{ address }}:5000/create" method="post">
                 <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
                 <button type="submit" class="add-url-btn">+</button>
             </form>

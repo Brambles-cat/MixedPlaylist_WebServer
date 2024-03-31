@@ -1,8 +1,13 @@
 import secrets
 import socket
-from flask import Flask
+from flask import Flask, render_template
 
-ip = socket.gethostbyname(socket.gethostname())
+# different value depending on whether my laptop is being used or an RPi
+usingRPi = False
+address = f"http://{socket.gethostbyname(socket.gethostname())}"
+
+def render_create(**context):
+    return render_template("create.html", address=address, **context)
 
 flaskapp = Flask(__name__)
 flaskapp.secret_key = secrets.token_urlsafe()
