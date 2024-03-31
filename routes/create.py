@@ -24,21 +24,26 @@ def create():
 	if session.get('videos', None) is None:
 			session['videos'] = []
 
+	if request.form.get("remove") is not None:
+		return remove_video(request.form["remove"])
+	
 	url = request.form['url']
 
 	if not validators.url(url):
-		return render_create(vids=session['videos'], error=True)
+		return render_with_err()
 
 	with YoutubeDL(ydl_opts) as ydl:
 		try:
-			info = ydl.extract_info(url, download=False)
+			vid_info = ydl.extract_info(url, download=False)
+
 		except Exception:
-			return render_create(vids=session['videos'], error=True)
+			return render_with_err()
 
 	session_vids = session['videos']
-	fetched_video: dict = video_data(info["thumbnail"], len(session_vids) + 1, info["title"], url)
+	fetched_video: dict = video_data(vid_info["thumbnail"], len(session_vids) + 1, vid_info["title"], url)
 	session_vids.append(fetched_video)
 	session['videos'] = session_vids
+
 	if session.get("playlist_id") is None:
 		session["playlist_id"] = str(uuid.uuid4())
 
@@ -56,3 +61,12 @@ def create():
 		)
 
 	return render_create(vids=session_vids, sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
+
+def remove_video(index: int) -> str:
+	print(index)
+
+def render_with_err() -> str:
+	if session.get("playlist_id") is not None:
+		return render_create(vids=session['videos'], error=True, sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
+	
+	return render_create(vids=session['videos'], error=True)

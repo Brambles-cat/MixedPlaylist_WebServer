@@ -8,11 +8,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="form-wrapper">
-            <form action="{{ address }}:5000/create" method="post">
+        <form class="form-wrapper" action="{{ address }}/create" method="post">
+            <div>
                 <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
                 <button type="submit" class="add-url-btn">+</button>
-            </form>
+            </div>
 
             {% if not vids %}
                 <div class="rectangle">
@@ -26,9 +26,7 @@
                     <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
                     <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
                     <span class="source">Source: {{ vid.source }}</span>
-                    <button class="delete-button">
-                        <img src="trash-can-icon.png">
-                    </button>
+                    <button class="delete-button" name="remove" value="{{ vid.index }}"></button>
                 </div>
             {% endfor %}
 
@@ -44,7 +42,7 @@
                 </button>
             {% endif %}
 
-        </div>
+            </form>
     </div>
     <script>
         const myButton = document.querySelector('.add-url-btn');
@@ -60,11 +58,8 @@
     {% if sharevalue %}
     <script>
         function copyToClipboard() {
-          /* Get the value from Flask */
-          var copyText = "{{ sharevalue }}";
-        
-          /* Copy the text to the clipboard */
-          navigator.clipboard.writeText(copyText).catch(function(err) {
+          var share_link = "{{ sharevalue }}";
+          navigator.clipboard.writeText(share_link).catch(function(err) {
             alert('Could not copy text: ' + err);
           });          
         }
