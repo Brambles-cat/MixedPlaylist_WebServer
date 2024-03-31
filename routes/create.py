@@ -39,13 +39,14 @@ def create():
 	fetched_video: dict = video_data(info["thumbnail"], len(session_vids) + 1, info["title"], url)
 	session_vids.append(fetched_video)
 	session['videos'] = session_vids
+
 	if session.get("playlist_id") is None:
 		session["playlist_id"] = str(uuid.uuid4())
 
 		data_to_store = (
 			session["playlist_id"], request.cookies.get("uid"), json.dumps(fetched_video)
 		)
-			
+
 		db.initialize_playlist(data_to_store)
 	else:
 		db.update_data(
