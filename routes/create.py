@@ -1,10 +1,11 @@
-from app import flaskapp
+from app import flaskapp, ip
 from flask import request, make_response, render_template, session
 import uuid
 from yt_dlp import YoutubeDL
 from modulethingy import *
 import db
 import json
+import validators
 
 ydl_opts = {
     "quiet": True,
@@ -14,27 +15,30 @@ ydl_opts = {
 def create():
 	if request.method != 'POST':
 		if request.cookies.get("uid") is None:
-			resp = make_response(render_template('create.html'))
+			resp = make_response(render_template('create.html', ip=ip))
 			resp.set_cookie("uid", str(uuid.uuid4()), max_age=None, path='/', secure=True, httponly=True)
 			return resp
 
-		return render_template('create.html')
-	with YoutubeDL(ydl_opts) as ydl:
-		if session.get('videos', None) is None:
+		return render_template('create.html', ip=ip)
+		
+	if session.get('videos', None) is None:
 			session['videos'] = []
 
-		url = request.form['url']
+	url = request.form['url']
 
+	if not validators.url(url):
+		return render_template('create.html', vids=session['videos'], error=True)
+
+	with YoutubeDL(ydl_opts) as ydl:
 		try:
 			info = ydl.extract_info(url, download=False)
 		except Exception as e:
-			return render_template('create.html', vids=session['videos'], error=True)
+			return render_template('create.html', ip=ip, vids=session['videos'], error=True)
 
 	session_vids = session['videos']
 	fetched_video: dict = video_data(info["thumbnail"], len(session_vids) + 1, info["title"], url)
 	session_vids.append(fetched_video)
 	session['videos'] = session_vids
-	
 	if session.get("playlist_id") is None:
 		session["playlist_id"] = str(uuid.uuid4())
 
