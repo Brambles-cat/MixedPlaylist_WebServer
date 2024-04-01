@@ -15,9 +15,7 @@
             </div>
 
             {% if not vids %}
-                <div class="rectangle">
-                    <div class="thumbnail"></div>
-                </div>
+                <div class="rectangle"></div>
             {% endif %}
 
             {% for vid in vids %}
@@ -36,7 +34,7 @@
 
             <div class="loading-symbol"></div>
             
-            {% if sharevalue %}
+            {% if vids %}
                 <button type="button" class="share-button" onclick="copyToClipboard()">
                     <div class="share_hover_box">Copy Link</div>
                 </button>
