@@ -12,5 +12,4 @@ def render_create(**context):
 flaskapp = Flask(__name__)
 flaskapp.secret_key = secrets.token_urlsafe()
 
-flaskapp.config['SESSION_TYPE'] = 'filesystem'
-flaskapp.config['SESSION_PERMANENT'] = True
+flaskapp.config['SESSION_PERMANENT'] = False
