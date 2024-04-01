@@ -13,16 +13,16 @@ ydl_opts = {
 
 @flaskapp.route("/create", methods=['POST', 'GET'])
 def create():
+	if session.get('videos') is None:
+		session['videos'] = []
+
 	if request.method != 'POST':
 		if request.cookies.get("uid") is None:
-			resp = make_response(render_create())
+			resp = make_response(render_create(vids=session.get('videos')))
 			resp.set_cookie("uid", str(uuid.uuid4()), max_age=None, path='/', secure=True, httponly=True)
 			return resp
 
-		return render_create()
-		
-	if session.get('videos', None) is None:
-			session['videos'] = []
+		return render_create(vids=session.get('videos'))
 
 	if request.form.get("remove") is not None:
 		return remove_video(request.form["remove"])
@@ -54,7 +54,7 @@ def create():
 		if usingRPi: db.initialize_playlist(data_to_store)
 
 	elif usingRPi:
-		db.update_data(
+		db.set_video(
 			session["playlist_id"],
 			json.dumps(fetched_video),
 			len(session_vids)
@@ -62,8 +62,38 @@ def create():
 
 	return render_create(vids=session_vids, sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
 
-def remove_video(index: int) -> str:
-	print(index)
+def remove_video(index: str) -> str:
+	playlist: list = session["videos"]
+
+	if len(playlist) == 1:
+		db.delete_row(session["playlist_id"])
+		session["videos"] = []
+		session["playlist_id"] = None
+		return render_create()
+	
+	index: int = int(index) - 1
+
+	try:
+		playlist.pop(index)
+	except Exception as e:
+		playlist_sync = db.get_playlist(session["playlist_id"])
+
+		if playlist_sync == None:
+			return render_create()
+		
+		playlist_sync = playlist_sync[2:]
+		print(playlist_sync)
+		session["videos"] = [json.loads(vid) for vid in playlist_sync if vid is not None]
+		return render_create(vids=session["videos"])
+	
+	for i in range(len(playlist)):
+		playlist[i]['index'] = i + 1
+
+	db.set_videos(session["playlist_id"], playlist)
+
+	session['videos'] = playlist
+
+	return render_create(vids=session['videos'], sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
 
 def render_with_err() -> str:
 	if session.get("playlist_id") is not None:
