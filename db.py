@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 from sqlite3 import Connection
+import json
 
 def create_table(conn: Connection, create_table_sql: str):
     try:
@@ -23,24 +24,42 @@ def initialize_playlist(data: tuple, keepConnectionOpen=False, connection=None) 
     
     conn.close()
 
-def update_data(playlist_id: str, vid_data: str, index: int): # super susceptible to sql injection and stuff. CHANGE LATER
-
+def set_video(playlist_id: str, vid_data: str, index: int): # maybe susceptible to sql injection and stuff. check later
     sql = f'UPDATE test SET v{index} = ? WHERE id = ? LIMIT 1'
 
-    conn: Connection = sqlite3.connect("saved_playlists.db", check_same_thread=False)
-    cur = conn.cursor()
-    cur.execute(sql, (vid_data, playlist_id))
-    conn.commit()
-    conn.close()
+    with sqlite3.connect("saved_playlists.db", check_same_thread=False) as conn:
+        cur = conn.cursor()
+        cur.execute(sql, (vid_data, playlist_id))
+        conn.commit()
 
-def get_playlist(id: str) -> tuple:
-    conn: Connection = sqlite3.connect("saved_playlists.db", check_same_thread=False)
+def set_videos(playlist_id: str, playlist: list):
+    sql = f'UPDATE test SET v1 = ?, v2 = ?, v3 = ?, v4 = ?, v5 = ?, v6 = ?, v7 = ?, v8 = ?, v9 = ?, v10 = ? WHERE id = ? LIMIT 1'
 
+    videos = [json.dumps(video_data) for video_data in playlist]
+
+    for i in range(10 - len(videos)):
+        videos.append(None)
+
+    with sqlite3.connect("saved_playlists.db", check_same_thread=False) as conn:
+        cur = conn.cursor()
+        cur.execute(sql, (*videos, playlist_id))
+        conn.commit()
+
+def delete_row(playlist_id):
+    sql = f'DELETE FROM test WHERE id = ?'
+
+    with sqlite3.connect("saved_playlists.db", check_same_thread=False) as conn:
+        cur = conn.cursor()
+        cur.execute(sql, (playlist_id, ))
+        conn.commit()
+
+def get_playlist(id: str) -> tuple | None:
     sql = ''' SELECT * FROM test WHERE id = ? LIMIT 1'''
-    cur = conn.cursor()
-    fetched_data = cur.execute(sql, (id,)).fetchone()
-    
-    conn.close()
+
+    with sqlite3.connect("saved_playlists.db", check_same_thread=False) as conn:
+        cur = conn.cursor()
+        fetched_data = cur.execute(sql, (id,)).fetchone()
+
     return fetched_data
 
 if __name__ == '__main__':
