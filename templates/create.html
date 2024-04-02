@@ -1,67 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mixed Playlist</title>
-    <link rel="stylesheet" href="static/styles/styles.css">
-</head>
-<body>
-    <div class="container">
-        <form class="form-wrapper" action="{{ address }}/create" method="post">
-            <div>
-                <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
-                <button type="submit" class="add-url-btn">+</button>
-            </div>
+{% extends 'playlist.html' %}
 
-            {% if not vids %}
-                <div class="rectangle"></div>
-            {% endif %}
+{% block form %}
+<form class="form-wrapper" action="{{ address }}/create" method="post">
+{% endblock %}
 
-            {% for vid in vids %}
-                <div class="rectangle">
-                    <span class="placeholder-number">{{ vid.index }}.</span>
-                    <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
-                    <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
-                    <span class="source">Source: {{ vid.source }}</span>
-                    <button class="delete-button" name="remove" value="{{ vid.index }}"></button>
-                </div>
-            {% endfor %}
-
-            {% if error %}
-                <div class="invalid-url-box">Invalid URL</div>
-            {% endif %}
-
-            <div class="loading-symbol"></div>
-            
-            {% if vids %}
-                <button type="button" class="share-button" onclick="copyToClipboard()">
-                    <div class="share_hover_box">Copy Link</div>
-                </button>
-            {% endif %}
-
-            </form>
+{% block text_input %}
+    <div>
+        <input type="text" placeholder="Video URL here" name="url" style="width: 50vw; margin-bottom: 10px;">
+        <button type="submit" class="add-url-btn">+</button>
     </div>
-    <script>
-        const myButton = document.querySelector('.add-url-btn');
-        const myTarget = document.querySelector('.loading-symbol');
-        
-        function toggleVisibility() {
-            myTarget.classList.toggle('visible');
-        }
-        
-        myButton.addEventListener('click', toggleVisibility);
-    </script>
+{% endblock %}
 
-    {% if sharevalue %}
-    <script>
-        function copyToClipboard() {
-          var share_link = "{{ sharevalue }}";
-          navigator.clipboard.writeText(share_link).catch(function(err) {
-            alert('Could not copy text: ' + err);
-          });          
-        }
-    </script>
+{% block no_videos %}
+    <div class="rectangle"></div>
+{% endblock %}
+
+{% block video_container %}
+    {% for vid in vids %}
+    <div class="rectangle">
+        <span class="placeholder-number">{{ vid.index }}.</span>
+        <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
+        <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
+        <span class="source">Source: {{ vid.source }}</span>
+        <button class="delete-button" name="remove" value="{{ vid.index }}"></button>
+    </div>
+    {% endfor %}
+{% endblock %}
+
+{% block container_end %}
+    {% if error %}
+        <div class="invalid-url-box">Invalid URL</div>
     {% endif %}
-</body>
-</html>
+
+    {% if vids %}
+        <button type="button" class="share-button" onclick="copyToClipboard()">
+            <div class="share_hover_box">Copy Link</div>
+        </button>
+    {% endif %}
+{% endblock %}   

@@ -4,106 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mixed Playlist</title>
-    <style>
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-        }
-
-        .video-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .rectangle {
-            position: relative;
-            display: flex;
-            align-items: center;
-            width: 80vw;
-            height: 25vw;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            margin-top: 10px;
-            max-height: 110px;
-        }
-
-        .thumbnail {
-            width: 50%;
-            height: 90%;
-            background-size: cover;
-            margin-left: 6px; /* Adjust this value for desired offset from the left side */
-            border-radius: 5px;
-            max-height: 100px;
-            max-width: 170px;
-        }
-
-        .circle {
-            display: none;
-            width: 20px;
-            height: 10px;
-            border: 4px solid #565656; /* Border for the circle */
-            border-radius: 100px 100px 0 0; /* Top corners rounded to create a half-circle */    
-            border-bottom: none;
-            transform-origin: bottom;
-            animation: spin 1s infinite linear;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .circle.visible {
-            display: block;
-        }
-
-        .placeholder-number {
-            font-size: 18px;
-            margin-left: 1px; /* Adjust this value for desired spacing */
-        }
-
-        .video_title {
-            font-size: large;
-            margin-left: 4%;
-            margin-bottom: 40px;
-            color:#3396c4;
-            text-decoration: none;
-        }
-
-        .source {
-            position: absolute;
-            bottom: 3px;
-            right: 5px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="static/styles/styles.css">
 </head>
 <body>
     <div class="container">
-        <div class="video-wrapper">
 
-            {% if not vids %}
-                <div class="rectangle">Playlist ID Not Found :(</div>
-            {% endif %}
+        {% block form %}
+        <form class="form-wrapper">
+        {% endblock %}
 
-            {% for vid in vids %}
-                <div class="rectangle">
-                    <span class="placeholder-number">{{ vid.index }}.</span>
-                    <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
-                    <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
-                    <span class="source">Source: {{ vid.source }}</span>
-                </div>
-            {% endfor %}
+                {% block text_input %}{% endblock %}
 
-            <div class="circle"></div>
-        </div>
+                {% if not vids %}
+                    {% block no_videos%}
+                    <div class="rectangle">Playlist ID Not Found :(</div>
+                    {% endblock %}
+                {% endif %}
+
+                {% block video_container %}
+                    {% for vid in vids %}
+                    <div class="rectangle">
+                        <span class="placeholder-number">{{ vid.index }}.</span>
+                        <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
+                        <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
+                        <span class="source">Source: {{ vid.source }}</span>
+                    </div>
+                    {% endfor %}
+                {% endblock %}
+
+                <div class="loading-symbol"></div>
+
+                {% block container_end %}{% endblock %}
+        </form>
+
     </div>
     <script>
-        const myButton = document.querySelector('.circle-button');
-        const myTarget = document.querySelector('.circle');
+        const myButton = document.querySelector('.add-url-btn');
+        const myTarget = document.querySelector('.loading-symbol');
         
         function toggleVisibility() {
             myTarget.classList.toggle('visible');
@@ -111,5 +48,16 @@
         
         myButton.addEventListener('click', toggleVisibility);
     </script>
+
+    {% if sharevalue %}
+    <script>
+        function copyToClipboard() {
+          var share_link = "{{ sharevalue }}";
+          navigator.clipboard.writeText(share_link).catch(function(err) {
+            alert('Could not copy text: ' + err);
+          });          
+        }
+    </script>
+    {% endif %}
 </body>
 </html>
