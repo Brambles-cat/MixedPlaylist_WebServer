@@ -71,6 +71,9 @@
 }
 
 .loading-symbol {
+    position: absolute;
+    left: 50%;
+    top: 40%;
     display: none;
     width: 20px;
     height: 10px;
