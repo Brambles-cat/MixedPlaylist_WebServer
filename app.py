@@ -17,7 +17,7 @@ flaskapp.secret_key = secrets.token_urlsafe()
 flaskapp.config['SESSION_PERMANENT'] = False
 
 def render_create(**context):
-    return render_template("create.html", address=address, theme=request.cookies.get("theme") , **context)
+    return render_template("create.html", address=address, theme=request.cookies.get("theme", "light") , **context)
 
 def ensure_cookies(resp: Response) -> bool:
     if request.cookies.get("uid") is None:
