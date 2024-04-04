@@ -24,19 +24,27 @@ def create():
 	if request.form.get("remove") is not None:
 		return remove_video(request.form["remove"])
 	
+	if (len(session['videos'])) >= 10:
+		return render_with_err('Only a Max of 10 Videos Allows')
+
 	url = request.form['url']
 
 	if not validators.url(url):
-		return render_with_err()
+		return render_with_err('Invalid URL')
+	
+	session_vids = session['videos']
+
+	for video in session_vids:
+		if video['url'] == url:
+			return render_with_err('Video Already in Playlist')
 
 	with YoutubeDL(ydl_opts) as ydl:
 		try:
 			vid_info = ydl.extract_info(url, download=False)
 
 		except Exception:
-			return render_with_err()
+			return render_with_err('Invalid URL')
 
-	session_vids = session['videos']
 	fetched_video: dict = video_data(vid_info["thumbnail"], len(session_vids) + 1, vid_info["title"], url)
 	session_vids.append(fetched_video)
 	session['videos'] = session_vids
@@ -92,8 +100,8 @@ def remove_video(index: str) -> str:
 
 	return render_create(vids=session['videos'], sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
 
-def render_with_err() -> str:
+def render_with_err(error_msg: str) -> str:
 	if session.get("playlist_id") is not None:
-		return render_create(vids=session['videos'], error=True, sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
+		return render_create(vids=session['videos'], error=error_msg, sharevalue=f'https://www.mixedplaylist.com/playlist/{session["playlist_id"]}')
 	
-	return render_create(vids=session['videos'], error=True)
+	return render_create(vids=session['videos'], error=error_msg)
