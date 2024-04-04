@@ -1,4 +1,4 @@
-from app import flaskapp, usingRPi, render_create
+from app import flaskapp, usingRPi, render_create, ensure_cookies
 from flask import request, make_response, session
 import uuid
 from yt_dlp import YoutubeDL
@@ -17,12 +17,9 @@ def create():
 		session['videos'] = []
 
 	if request.method != 'POST':
-		if request.cookies.get("uid") is None:
-			resp = make_response(render_create(vids=session.get('videos')))
-			resp.set_cookie("uid", str(uuid.uuid4()), max_age=None, path='/', secure=True, httponly=True)
-			return resp
-
-		return render_create(vids=session.get('videos'))
+		resp = make_response(render_create(vids=session.get('videos')))
+		ensure_cookies(resp)
+		return resp
 
 	if request.form.get("remove") is not None:
 		return remove_video(request.form["remove"])
