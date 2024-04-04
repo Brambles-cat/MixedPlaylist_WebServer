@@ -26,7 +26,7 @@
                     <div class="rectangle">
                         <span class="placeholder-number">{{ vid.index }}.</span>
                         <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
-                        <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
+                        <a href='{{ vid.url }}' class="video-title">{{ vid.title }}</a>
                         <span class="source">Source: {{ vid.source }}</span>
                     </div>
                     {% endfor %}
@@ -35,8 +35,11 @@
 
         <div class="corner-buttons">
             <button type="button" id="theme-button">
-                <div id="theme-text">{{ 'Light' if theme == 'light' else 'Dark' }}</div>
-                <div id="theme-icon" style="background-image: url('/static/images/{{ 'luna' if theme == 'dark' else 'celestia' }}_cutie_mark.png');"></div>
+                <div id="theme-text">{{ 'Dark' if theme == 'dark' else 'Light' }}</div>
+
+                {% set image_name = 'luna' if theme == 'dark' else 'celestia' %}
+                <div id="theme-icon" style="background-image: url('/static/images/{{ image_name }}_cutie_mark.png');"></div>
+
             </button>
             {% block corner_buttons %}{% endblock %}
         </div>
@@ -51,21 +54,17 @@
         var clickable = {};
         var lastClick = 0;
         clickable.value = true;
-        var rectangles = document.getElementsByClassName('rectangle');
-        var remove_btns = document.getElementsByClassName('remove-button')
         var theme_btn = document.getElementById('theme-button')
-        var url_btn = document.getElementById('add-url-btn');
         var theme_text = document.getElementById('theme-text');
         var theme_icon = document.getElementById('theme-icon');
 
         $("#theme-button").click(function() {
             if (!clickable.value) return;
 
+            // Less than .8 second has passed since the last click, do nothing
             var currentTime = new Date().getTime();
-            if (currentTime - lastClick < 800) {
-                // Less than .8 second has passed since the last click, do nothing
-                return;
-            }
+            if (currentTime - lastClick < 800) return;
+
             lastClick = currentTime;
 
             clickable.value = false;
@@ -93,17 +92,11 @@
                 theme_text.textContent = 'Dark';
                 theme_icon.style.setProperty('background-image', 'url(/static/images/luna_cutie_mark.png)');
 
-                if (share_btn) {
-                    share_btn.style.setProperty('--share-btn-color', '#f9efc2');
-
-                    for (var i = 0; i < remove_btns.length; i++)
-                        remove_btns[i].style.setProperty('--remove-btn-color', '#ccc3fb');
-                }
-                
-                if (url_btn) url_btn.style.setProperty('--url-btn-color', '#f9efc2');
-
-                for (var i = 0; i < rectangles.length; i++)
-                    rectangles[i].style.setProperty('--rectangle-color', '#2f55c3');
+                document.body.style.setProperty('--share-btn-color', '#ccc3fb');
+                document.body.style.setProperty('--remove-btn-color', '#ccc3fb');
+                document.body.style.setProperty('--url-btn-color', '#815acd');
+                document.body.style.setProperty('--rectangle-color', '#2f55c3');
+                document.body.style.setProperty('--video-title-color', '#ccc3fb');
                 
             } else {
                 document.body.style.setProperty('--body-color', '#fbf6fc');
@@ -111,19 +104,11 @@
                 theme_text.textContent = 'Light';
                 theme_icon.style.setProperty('background-image', 'url(/static/images/celestia_cutie_mark.png)');
 
-
-                if (share_btn) {
-                    share_btn.style.setProperty('--share-btn-color', '#6ebbcbbf');
-
-                    for (var i = 0; i < remove_btns.length; i++)
-                        remove_btns[i].style.setProperty('--remove-btn-color', '#e9a2f1');
-                }
-
-                if (url_btn) url_btn.style.setProperty('--url-btn-color', '#fdec8c')
-
-                for (var i = 0; i < rectangles.length; i++) {
-                    rectangles[i].style.setProperty('--rectangle-color', '#f7e5f1');
-                }
+                document.body.style.setProperty('--share-btn-color', '#6ebbcbbf');
+                document.body.style.setProperty('--remove-btn-color', '#e9a2f1');
+                document.body.style.setProperty('--url-btn-color', '#fdec8c')
+                document.body.style.setProperty('--rectangle-color', '#f7e5f1');
+                document.body.style.setProperty('--video-title-color', '#3396c4');
                 
             }
             theme = (theme === 'dark' ? 'light' : 'dark');

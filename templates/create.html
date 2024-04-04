@@ -5,14 +5,16 @@
 {% endblock %}
 
 {% block text_input %}
-    <div style="margin-top: 30px;">
+    <div style="margin-top: 30px; margin-bottom: 10px;">
         <input type="text" placeholder="Video URL here" name="url" style="width: 50vw;">
         <button type="submit" id="add-url-btn">+</button>
     </div>
 {% endblock %}
 
 {% block no_videos %}
-<div class="rectangle"></div>
+<div class="rectangle">
+    <div class="thumbnail"></div>
+</div>
 {% endblock %}
 
 {% block video_container %}
@@ -20,9 +22,9 @@
     <div class="rectangle">
         <span class="placeholder-number">{{ vid.index }}.</span>
         <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
-        <a href='{{ vid.url }}' class="video_title">{{ vid.title }}</a>
+        <a href='{{ vid.url }}' class="video-title">{{ vid.title }}</a>
         <span class="source">Source: {{ vid.source }}</span>
-        <button class="remove-button" name="remove" value="{{ vid.index }}"></button>
+        <button type="submit" class="remove-button" name="remove" value="{{ vid.index }}"></button>
     </div>
     {% endfor %}
 {% endblock %}
@@ -37,6 +39,6 @@
 
 {% block container_end %}
     {% if error %}
-        <div class="invalid-url-box">Invalid URL</div>
+        <div id="error-box">{{ error }}</div>
     {% endif %}
 {% endblock %}   

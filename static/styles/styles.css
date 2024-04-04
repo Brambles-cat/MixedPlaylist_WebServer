@@ -1,6 +1,7 @@
 :root {
     --body-color: #fbf6fc;
     --rectangle-color: #f7e5f1;
+    --video-title-color: #3396c4;
     --url-btn-color: #fdec8c; /*f3e6a0*/;
     --remove-btn-color: #6ebbcbbf;
     --share-btn-color: #6ebbcbbf;
@@ -106,7 +107,7 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-.loading-symbol.visible {
+#loading-symbol.visible {
     display: block;
 }
 
@@ -115,12 +116,16 @@ body {
     margin-left: 1px;
 }
 
-.video_title {
+.video-title {
     font-size: large;
     margin-left: 4%;
     margin-bottom: 40px;
-    color:#3396c4;
+    color: var(--video-title-color);
     text-decoration: none;
+}
+
+.video-title:hover {
+    text-decoration: underline;
 }
 
 .source {
@@ -129,14 +134,13 @@ body {
     right: 5px;
 }
 
-.invalid-url-box {
-    width: 160px;
-    height: 75px;
+#error-box {
+    /*        T    R    L     B */
+    padding: 30px 25px 25px 30px;
     background-color: #888;
     color: white;
     border-radius: 5px;
     text-align: center;
-    line-height: 75px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -162,8 +166,8 @@ body {
 #theme-button {
     display: flex;
     flex-direction: row;
-    /*     top  right bottom left*/
-    padding: 7px 7px 7px 9px;
+    /*     top  right left bottom*/
+    padding: 7px 7px 9px 7px;
     border: none;
     align-items: center;
     text-align: start;
@@ -204,6 +208,6 @@ body {
     color: rgb(167, 187, 255);
 }
 
-.share-button:hover > .share_hover_box {
+#share-button:hover > #share_hover_box {
     visibility: visible;
 }
