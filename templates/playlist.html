@@ -88,20 +88,23 @@
             var share_btn = document.getElementById('share-button');
 
             if (theme === 'light') {
-                document.body.style.setProperty('--body-color', '#333679');
+                document.body.style.setProperty('--body-color', '#404680');
                 theme_btn.style.setProperty('--theme-btn-color', 'black');
                 theme_text.textContent = 'Dark';
                 theme_icon.style.setProperty('background-image', 'url(/static/images/luna_cutie_mark.png)');
 
-                if (share_btn) share_btn.style.setProperty('--share-btn-color', '#f9efc2');
+                if (share_btn) {
+                    share_btn.style.setProperty('--share-btn-color', '#f9efc2');
+
+                    for (var i = 0; i < remove_btns.length; i++)
+                        remove_btns[i].style.setProperty('--remove-btn-color', '#ccc3fb');
+                }
+                
                 if (url_btn) url_btn.style.setProperty('--url-btn-color', '#f9efc2');
 
-                for (var i = 0; i < rectangles.length; i++) {
-                    rectangles[i].style.setProperty('--rectangle-color', '#ccc3fb');
-                }
-                for (var i = 0; i < remove_btns.length; i++) {
-                    remove_btns[i].style.setProperty('--remove-btn-color', '#ccc3fb');
-                }
+                for (var i = 0; i < rectangles.length; i++)
+                    rectangles[i].style.setProperty('--rectangle-color', '#2f55c3');
+                
             } else {
                 document.body.style.setProperty('--body-color', '#fbf6fc');
                 theme_btn.style.setProperty('--theme-btn-color', 'white');
@@ -109,15 +112,19 @@
                 theme_icon.style.setProperty('background-image', 'url(/static/images/celestia_cutie_mark.png)');
 
 
-                if (share_btn) share_btn.style.setProperty('--share-btn-color', '#6ebbcbbf')
+                if (share_btn) {
+                    share_btn.style.setProperty('--share-btn-color', '#6ebbcbbf');
+
+                    for (var i = 0; i < remove_btns.length; i++)
+                        remove_btns[i].style.setProperty('--remove-btn-color', '#e9a2f1');
+                }
+
                 if (url_btn) url_btn.style.setProperty('--url-btn-color', '#fdec8c')
 
                 for (var i = 0; i < rectangles.length; i++) {
                     rectangles[i].style.setProperty('--rectangle-color', '#f7e5f1');
                 }
-                for (var i = 0; i < remove_btns.length; i++) {
-                    remove_btns[i].style.setProperty('--remove-btn-color', '#e9a2f1');
-                }
+                
             }
             theme = (theme === 'dark' ? 'light' : 'dark');
         }
