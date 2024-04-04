@@ -31,16 +31,104 @@
                     </div>
                     {% endfor %}
                 {% endblock %}
-
-                <div class="loading-symbol"></div>
-
-                {% block container_end %}{% endblock %}
         </form>
 
+        <div class="corner-buttons">
+            <button type="button" id="theme-button">
+                <div id="theme-text">{{ 'Light' if theme == 'light' else 'Dark' }}</div>
+                <div id="theme-icon" style="background-image: url('/static/images/{{ 'luna' if theme == 'dark' else 'celestia' }}_cutie_mark.png');"></div>
+            </button>
+            {% block corner_buttons %}{% endblock %}
+        </div>
+
+        <div id="loading-symbol"></div>
+        {% block container_end %}{% endblock %}
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        const myButton = document.querySelector('.add-url-btn');
-        const myTarget = document.querySelector('.loading-symbol');
+        var theme = "{{ theme }}";
+        console.log(theme);
+        var clickable = {};
+        var lastClick = 0;
+        clickable.value = true;
+        var rectangles = document.getElementsByClassName('rectangle');
+        var remove_btns = document.getElementsByClassName('remove-button')
+        var theme_btn = document.getElementById('theme-button')
+        var url_btn = document.getElementById('add-url-btn');
+        var theme_text = document.getElementById('theme-text');
+        var theme_icon = document.getElementById('theme-icon');
+
+        $("#theme-button").click(function() {
+            if (!clickable.value) return;
+
+            var currentTime = new Date().getTime();
+            if (currentTime - lastClick < 800) {
+                // Less than .8 second has passed since the last click, do nothing
+                return;
+            }
+            lastClick = currentTime;
+
+            clickable.value = false;
+            $.ajax({
+                url: '/switch_theme',
+                type: 'POST',
+                success: function(response) {
+                    toggleTheme();
+                    clickable.value = true;
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                    clickable.value = true;
+                }
+            });
+        });
+
+        function toggleTheme() {
+            var share_btn = document.getElementById('share-button');
+
+            if (theme === 'light') {
+                document.body.style.setProperty('--body-color', '#333679');
+                theme_btn.style.setProperty('--theme-btn-color', 'black');
+                theme_text.textContent = 'Dark';
+                theme_icon.style.setProperty('background-image', 'url(/static/images/luna_cutie_mark.png)');
+
+                if (share_btn) share_btn.style.setProperty('--share-btn-color', '#f9efc2');
+                if (url_btn) url_btn.style.setProperty('--url-btn-color', '#f9efc2');
+
+                for (var i = 0; i < rectangles.length; i++) {
+                    rectangles[i].style.setProperty('--rectangle-color', '#ccc3fb');
+                }
+                for (var i = 0; i < remove_btns.length; i++) {
+                    remove_btns[i].style.setProperty('--remove-btn-color', '#ccc3fb');
+                }
+            } else {
+                document.body.style.setProperty('--body-color', '#fbf6fc');
+                theme_btn.style.setProperty('--theme-btn-color', 'white');
+                theme_text.textContent = 'Light';
+                theme_icon.style.setProperty('background-image', 'url(/static/images/celestia_cutie_mark.png)');
+
+
+                if (share_btn) share_btn.style.setProperty('--share-btn-color', '#6ebbcbbf')
+                if (url_btn) url_btn.style.setProperty('--url-btn-color', '#fdec8c')
+
+                for (var i = 0; i < rectangles.length; i++) {
+                    rectangles[i].style.setProperty('--rectangle-color', '#f7e5f1');
+                }
+                for (var i = 0; i < remove_btns.length; i++) {
+                    remove_btns[i].style.setProperty('--remove-btn-color', '#e9a2f1');
+                }
+            }
+            theme = (theme === 'dark' ? 'light' : 'dark');
+        }
+
+        if (theme === 'dark') {
+            theme = 'light';
+            toggleTheme();
+        }
+        
+        const myButton = document.getElementById('add-url-btn');
+        const myTarget = document.getElementById('loading-symbol');
         
         function toggleVisibility() {
             myTarget.classList.toggle('visible');
