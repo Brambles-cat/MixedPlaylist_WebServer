@@ -33,7 +33,7 @@ def validate():
             ineligible_votes[url] = f"Duplicate Vote x{occurences}"
     
 
-    checklist: list[function] = [duration_check.check_duration, check_blacklist]
+    checklist: list[function] = [duration_check.check_duration, check_blacklist, upload_date.check_dates]
 
     for check in checklist:
         check_fails = check(ballot)
