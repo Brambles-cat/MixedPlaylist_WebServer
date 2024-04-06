@@ -1,0 +1,54 @@
+// FormApp.getActiveForm();
+
+function onFormSubmit(e) {
+  var formResponse = e.response;
+  var itemResponses = formResponse.getItemResponses();
+  var formData = [];
+  
+  for (var i = 0; i < itemResponses.length; i++) {
+    var itemResponse = itemResponses[i];
+    formData.push(itemResponse.getResponse());
+  }
+
+  const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  var email = formData.pop();
+  if (!email || !pattern.test(email)) return;
+  
+  var options = {
+    method: 'post',
+    payload: JSON.stringify(formData),
+    contentType: 'application/json',
+    muteHttpExceptions: true
+  };
+  
+  var resp = UrlFetchApp.fetch('https://www.mixedplaylist.com/validator', options);
+
+  console.log(resp.getContentText())
+  var invalid = JSON.parse(resp.getContentText());
+
+  console.log(Object.keys(invalid).length)
+  if (Object.keys(invalid).length !== 0) {
+    var message = "Here's a list of your votes that were detected with issues:\n\n";
+
+    for (var url in invalid) {
+      message += url + " : " + invalid[url] + "\n\n"
+    }
+
+    message += "\nAll of your eligible votes will still be counted, but feel free to edit your ballot so that every vote counts!"
+
+    MailApp.sendEmail({
+      to: email,
+      subject: 'Votes Recieved with Errors',
+      body: message
+    });
+
+  } else {
+    MailApp.sendEmail({
+      to: email,
+      subject: 'Votes Recieved Successfully',
+      body: "All votes were deemed eligible. Thanks for voting!"
+    });
+    
+  }
+}
