@@ -1,6 +1,5 @@
 from flask import make_response, request
 from app import flaskapp, ensure_cookies
-import uuid
 
 @flaskapp.route('/switch_theme', methods=['POST'])
 def switch_theme():
