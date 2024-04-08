@@ -1,11 +1,12 @@
 from app import flaskapp, usingRPi, render_create, ensure_cookies
 from flask import request, make_response, session
 import uuid
-from yt_dlp import YoutubeDL
 from modulethingy import *
 import db
 import json
 import validators
+import votevalidator
+
 
 ydl_opts = {
     "quiet": True,
@@ -38,14 +39,12 @@ def create():
 		if video['url'] == url:
 			return render_with_err('Video Already in Playlist')
 
-	with YoutubeDL(ydl_opts) as ydl:
-		try:
-			vid_info = ydl.extract_info(url, download=False)
+	vid_info = votevalidator.data_pulling.get_video_metadata(url)
+	
+	if vid_info == None:
+		return render_with_err('Invalid URL')
 
-		except Exception:
-			return render_with_err('Invalid URL')
-
-	fetched_video: dict = video_data(vid_info["thumbnail"], len(session_vids) + 1, vid_info["title"], url)
+	fetched_video: dict = video_data(vid_info.thumbnail_url, len(session_vids) + 1, vid_info.title, url)
 	session_vids.append(fetched_video)
 	session['videos'] = session_vids
 

@@ -10,6 +10,11 @@ import json
 load_dotenv()
 API_KEY = os.getenv('apikey')
 
+
+def validate_video(video_data):
+    pass
+
+
 @flaskapp.route("/validator", methods=['POST', 'GET'])
 def validate():
     payload: list = request.get_json()
