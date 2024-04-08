@@ -71,7 +71,7 @@ def remove_video(index: str) -> str:
 	playlist: list = session["videos"]
 
 	if len(playlist) == 1:
-		db.delete_row(session["playlist_id"])
+		if usingRPi: db.delete_row(session["playlist_id"])
 		session["videos"] = []
 		session["playlist_id"] = None
 		return render_create()
@@ -81,6 +81,8 @@ def remove_video(index: str) -> str:
 	try:
 		playlist.pop(index)
 	except Exception as e:
+		if not usingRPi: return render_create() # worry about this later
+
 		playlist_sync = db.get_playlist(session["playlist_id"])
 
 		if playlist_sync == None:
@@ -94,7 +96,7 @@ def remove_video(index: str) -> str:
 	for i in range(len(playlist)):
 		playlist[i]['index'] = i + 1
 
-	db.set_videos(session["playlist_id"], playlist)
+	if usingRPi: db.set_videos(session["playlist_id"], playlist)
 
 	session['videos'] = playlist
 

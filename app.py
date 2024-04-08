@@ -8,7 +8,7 @@ import dotenv
 dotenv.load_dotenv()
 # different value depending on whether my laptop is being used or an RPi
 usingRPi = os.getenv('usingRPi')
-address = "https://www.mixedplaylist.com" if usingRPi else f"http://{socket.gethostbyname(socket.gethostname())}"
+address = "https://www.mixedplaylist.com" if usingRPi else "127.0.0.1:5000" # f"http://{socket.gethostbyname(socket.gethostname())}"
 
 
 flaskapp = Flask(__name__)

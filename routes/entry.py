@@ -4,4 +4,4 @@ from app import flaskapp, address
 @flaskapp.route("/")
 def enter():
 	session.clear()
-	return redirect(f'{address}/create')
+	return redirect(f'/create')
