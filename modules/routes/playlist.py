@@ -1,6 +1,6 @@
 from flask import render_template, session, request, redirect
 from app import flaskapp, address, usingRPi
-import db
+from .. import db
 import json
 
 @flaskapp.route('/playlist/<id>') #id. oid

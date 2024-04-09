@@ -21,10 +21,16 @@
     {% for vid in vids %}
     <div class="rectangle">
         <span class="placeholder-number">{{ vid.index }}.</span>
-        <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');"></div>
+        <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');">
+            <div class="vid-duration">Duration</div>
+        </div>
         <a href='{{ vid.url }}' class="video-title">{{ vid.title }}</a>
+        <div class="vd2">Uploader ● Date Uploaded ● Views</div>
         <span class="source">Source: {{ vid.source }}</span>
         <button type="submit" class="remove-button" name="remove" value="{{ vid.index }}"></button>
+        {% if vid.issues %}
+            <div class="vid-issues">{{ vid.issues }}</div>
+        {% endif %}
     </div>
     {% endfor %}
 {% endblock %}

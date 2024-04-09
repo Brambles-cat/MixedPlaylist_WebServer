@@ -1,8 +1,8 @@
 from app import flaskapp, usingRPi, render_create, ensure_cookies
 from flask import request, make_response, session
 import uuid
-from modulethingy import *
-import db
+from modules.bag_o_nifty_stuff import p_video_data, get_video_issues
+import modules.db as db
 import json
 import validators
 import votevalidator
@@ -42,9 +42,15 @@ def create():
 	vid_info = votevalidator.data_pulling.get_video_metadata(url)
 	
 	if vid_info == None:
-		return render_with_err('Invalid URL')
+		return render_with_err("Couldn't Get Video Data")
 
-	fetched_video: dict = video_data(vid_info.thumbnail_url, len(session_vids) + 1, vid_info.title, url)
+	fetched_video: dict = p_video_data(
+		vid_info.thumbnail_url,
+		len(session_vids) + 1,
+		vid_info.title, url,
+		get_video_issues(vid_info)
+	)
+
 	session_vids.append(fetched_video)
 	session['videos'] = session_vids
 
@@ -80,7 +86,7 @@ def remove_video(index: str) -> str:
 	try:
 		playlist.pop(index)
 	except Exception as e:
-		if not usingRPi: return render_create() # worry about this later
+		if not usingRPi: return render_create() # worry about this later it's not that important
 
 		playlist_sync = db.get_playlist(session["playlist_id"])
 

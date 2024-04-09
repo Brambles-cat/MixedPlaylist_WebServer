@@ -1,5 +1,5 @@
 from flask import redirect, session
-from app import flaskapp, address
+from app import flaskapp
 
 @flaskapp.route("/")
 def enter():

@@ -1,18 +1,9 @@
 from app import flaskapp
 from flask import request, make_response
-from votevalidator import check_duplicates, check_blacklist, upload_date, data_pulling, duration_check
+from votevalidator import check_duplicates, upload_date, data_pulling, duration_check, ballot_check_blacklist
 from votevalidator.classes.video_metadata import VideoMetadata
-from dotenv import load_dotenv
-import os
+from ..bag_o_nifty_stuff import API_KEY
 import json
-
-
-load_dotenv()
-API_KEY = os.getenv('apikey')
-
-
-def validate_video(video_data):
-    pass
 
 
 @flaskapp.route("/validator", methods=['POST', 'GET'])
@@ -38,7 +29,7 @@ def validate():
             ineligible_votes[url] = f"Duplicate Vote x{occurences}"
     
 
-    checklist: list[function] = [duration_check.check_duration, check_blacklist, upload_date.check_dates]
+    checklist: list[function] = [duration_check.check_durations, ballot_check_blacklist, upload_date.check_dates]
 
     for check in checklist:
         check_fails = check(ballot)
