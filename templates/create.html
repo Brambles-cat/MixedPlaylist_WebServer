@@ -24,13 +24,15 @@
         <div class="thumbnail" style="background-image: url('{{ vid.thumbnail }}');">
             <div class="vid-duration">Duration</div>
         </div>
-        <a href='{{ vid.url }}' class="video-title">{{ vid.title }}</a>
-        <div class="vd2">Uploader ● Date Uploaded ● Views</div>
-        <span class="source">Source: {{ vid.source }}</span>
+        <div rec-contents-col>
+            <a href='{{ vid.url }}' class="video-title">{{ vid.title }}</a>
+            <div class="vd2">Uploader ● Date Uploaded ● Views</div>
+            <div class="source">Source: {{ vid.source }}</div>
+            {% if vid.issues %}
+                <div class="vid-issues">{{ vid.issues }}</div>
+            {% endif %}
+        </div>
         <button type="submit" class="remove-button" name="remove" value="{{ vid.index }}"></button>
-        {% if vid.issues %}
-            <div class="vid-issues">{{ vid.issues }}</div>
-        {% endif %}
     </div>
     {% endfor %}
 {% endblock %}

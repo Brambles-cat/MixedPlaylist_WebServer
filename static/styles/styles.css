@@ -6,6 +6,7 @@
     --remove-btn-color: #6ebbcbbf;
     --share-btn-color: #6ebbcbbf;
     --theme-btn-color: white;
+    --checks-failed-color: red;
 }
 
 body {
@@ -55,6 +56,13 @@ body {
     max-height: 110px;
 }
 
+.rec-contents-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 100px;
+}
+
 .remove-button {
     background-color: var(--remove-btn-color);
     width: 20px;
@@ -88,6 +96,10 @@ body {
     max-width: 170px;
 }
 
+.vid-issues {
+    color: var(--checks-failed-color);
+}
+
 #loading-symbol {
     position: absolute;
     left: 50%;
@@ -117,8 +129,9 @@ body {
 }
 
 .video-title {
+    text-align: left;
+    overflow-wrap: break-word;
     font-size: large;
-    margin-left: 4%;
     margin-bottom: 40px;
     color: var(--video-title-color);
     text-decoration: none;
